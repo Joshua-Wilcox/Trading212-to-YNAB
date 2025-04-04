@@ -1,47 +1,57 @@
 # Trading 212 to YNAB Sync
 
-This tool helps you sync transactions from Trading 212 to YNAB (You Need A Budget). It allows you to filter specific transaction types (like cashback or interest) before sending them to YNAB.
+A tool that synchronizes transactions from Trading 212 to YNAB (You Need A Budget). It supports filtering specific transaction types, formatting merchant names, and handling various transaction details.
+
+## Features
+
+- Import transactions directly from Trading 212 API or from a downloaded CSV
+- Filter transactions by type (deposits, card payments, interest, etc.)
+- Format merchant names and categories for better readability in YNAB
+- Support for date ranges to limit which transactions are imported
+- Detailed transaction information including merchant categories for card payments
+- Automatic handling of duplicates through YNAB's import_id system
+- Support for automated scheduling
 
 ## Setup
 
-1. **Install Required Packages**
+### 1. Install Required Packages
 
-   ```bash
-   pip install requests python-dotenv
-   ```
+```bash
+pip install requests python-dotenv
+```
 
-2. **Environment Variables**
+### 2. Environment Variables
 
-   Create a `.env` file in the root directory with the following variables:
+Create a `.env` file in the root directory with the following variables:
 
-   ```
-   YNAB_TOKEN=your_ynab_api_token
-   BUDGET=your_ynab_budget_id
-   ACCOUNT=your_ynab_account_id
-   TRADING212_TOKEN=your_trading212_api_token  # Only needed for automatic fetching
-   ```
+```
+YNAB_TOKEN=your_ynab_api_token
+BUDGET=your_ynab_budget_id
+ACCOUNT=your_ynab_account_id
+TRADING212_TOKEN=your_trading212_api_token  # Only needed for automatic fetching
+```
 
-   - YNAB_TOKEN: Your YNAB API token (get it from https://app.youneedabudget.com/settings/developer)
-   - BUDGET: Your YNAB budget ID (found in the URL when viewing your budget)
-   - ACCOUNT: The YNAB account ID where transactions should be added
-   - TRADING212_TOKEN: Your Trading 212 API token (needed only if using the --fetch option)
+- YNAB_TOKEN: Your YNAB API token (get it from https://app.youneedabudget.com/settings/developer)
+- BUDGET: Your YNAB budget ID (found in the URL when viewing your budget)
+- ACCOUNT: The YNAB account ID where transactions should be added
+- TRADING212_TOKEN: Your Trading 212 API token (needed only if using the --fetch option)
 
-   **Important note about Trading 212 API tokens**: When adding your Trading 212 token to the .env file, do not include "Bearer " prefix - the script adds this automatically.
+**Important note about Trading 212 API tokens**: When adding your Trading 212 token to the .env file, do not include "Bearer " prefix - the script adds this automatically.
 
-3. **Getting Transaction Data**
+### 3. Getting Transaction Data
 
-   There are two ways to get your Trading 212 transaction data:
+There are two ways to get your Trading 212 transaction data:
 
-   **Option 1: Download CSV manually**
-   - Log into your Trading 212 account
-   - Go to the History section
-   - Export your transaction history as CSV
-   - Save the CSV file locally
+**Option 1: Download CSV manually**
+- Log into your Trading 212 account
+- Go to the History section
+- Export your transaction history as CSV
+- Save the CSV file locally
 
-   **Option 2: Automatic fetch using the Trading 212 API**
-   - Get an API token from Trading 212
-   - Add it to your .env file as TRADING212_TOKEN
-   - Use the --fetch option when running the script
+**Option 2: Automatic fetch using the Trading 212 API**
+- Get an API token from Trading 212
+- Add it to your .env file as TRADING212_TOKEN
+- Use the --fetch option when running the script
 
 ## Usage
 
@@ -173,18 +183,6 @@ For daily syncing of only the last day's transactions:
    python main.py --fetch --filter "Interest on cash" "Cashback" "Card debit" --send
    ```
 2. Create a new task in Task Scheduler that runs this batch file hourly
-
-If you need to disable the cache for some reason (e.g., to resend all transactions):
-
-```bash
-python main.py --fetch --send --no-cache
-```
-
-You can also specify a custom location for the cache file:
-
-```bash
-python main.py --fetch --send --cache-file /path/to/custom_cache.json
-```
 
 ### Debugging Options
 
