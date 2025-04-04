@@ -198,7 +198,7 @@ This will save the raw CSV content exactly as received from Trading 212 (either 
 
 If you encounter a 429 "Too Many Requests" error:
 1. The Trading 212 API has strict rate limits (1 request per minute for exports list, 1 request per 30 seconds for creating exports)
-2. The script now includes automatic rate limiting and retry logic
+2. The script includes automatic rate limiting and retry logic
 3. If you still face issues, wait at least 1 minute before trying again
 4. Consider using the CSV download method if rate limiting persists
 
